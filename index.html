@@ -2,7 +2,7 @@
 <html ng-app="mwl.calendar.docs">
   <head>
   	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  	
+
     <script src="https://unpkg.com/moment@2.17.1"></script>
     <script src="https://unpkg.com/interactjs@1"></script>
     <script src="https://unpkg.com/angular@1.6.6/angular.js"></script>
@@ -27,7 +27,7 @@
     	<h2> {{ topMsg }} </h2> 
     	<div id="inputWrapper">
 	    	Destination <input type="text" id="destinationInput"><br> 
-	    	<button type="button" ng-click="showCal()">Submit</button>
+	    	<button type="button" ng-click="showCal()" onclick="getLatLong(document.getElementById('destinationInput').value)">Submit</button>
     	</div>
     </div>
     
