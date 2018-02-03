@@ -32,13 +32,31 @@ angular
       }
     ];
 
-    vm.calendarView = 'month';
+    vm.calendarView = 'week';
     vm.viewDate = moment().startOf('month').toDate();
     vm.cellIsOpen = true;
 
   })
   .controller('btnCtrl', ['$scope', function($scope){
-    $scope.showCal = function(){
-      document.getElementById("calendar_wrapper").style.display="inline";
+    $scope.topMsg = "Create Schedule";
+
+    //Executes when submit button is clicked.
+    //Displays calendar and collects user destination.
+    $scope.showCal = function(){      
+      var userDestination = document.getElementById("destinationInput").value;
+
+      //displays error if destination is blank
+      //else shows calendar and collects destination
+      if (userDestination == ""){
+        alert("Please enter a destination.");
+      } 
+      else{
+        document.getElementById("calendar_wrapper").style.display="inline";
+        $scope.topMsg = "Your Destination: " + userDestination;
+        var element = document.getElementById("inputWrapper");
+        element.parentNode.removeChild(element);
+      }
+
+      
     }
   }]);

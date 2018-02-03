@@ -17,20 +17,26 @@
     <script src="helpers.js"></script>
   </head>
   <body>
-    <div ng-controller="btnCtrl">
-      <button type="button" ng-click="showCal()">show</button>
+    <div ng-controller="btnCtrl" class="text-center">
+    	<h2> {{ topMsg }} </h2> 
+    	<div id="inputWrapper">
+	    	Destination <input type="text" id="destinationInput"><br> 
+	    	<button type="button" ng-click="showCal()">Submit</button>
+    	</div>
     </div>
-
+    
     <div ng-controller="EditableDeletableEventsCtrl as vm" id="calendar_wrapper">
-  <ng-include src="'calendarControls.html'"></ng-include>
-  <mwl-calendar
-    events="vm.events"
-    view="vm.calendarView"
-    view-date="vm.viewDate"
-    cell-is-open="vm.cellIsOpen"
-    cell-auto-open-disabled="true">
-  </mwl-calendar>
-</div>
+  		<ng-include src="'calendarControls.html'"></ng-include>
+  		<!-- Calendar by Matt Lewis -->
+		  <mwl-calendar
+		    events="vm.events"
+		    view="vm.calendarView"
+		    view-date="vm.viewDate"
+		    cell-is-open="vm.cellIsOpen"
+		    cell-auto-open-disabled="true">
+		  </mwl-calendar>
+		  <button type="button">Add Event</button>
+	</div>
 
   </body>
 </html>
