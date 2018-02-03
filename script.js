@@ -1,3 +1,7 @@
+//global variables
+var userDest = "";
+
+//angular code
 angular.module('mwl.calendar.docs', ['mwl.calendar', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);
 angular
   .module('mwl.calendar.docs')
@@ -54,6 +58,7 @@ angular
         document.getElementById("calendar_wrapper").style.display="inline";
         document.getElementById("addEvent_wrapper").style.display="inline";
         $scope.topMsg = "Your Destination: " + userDestination;
+        userDest = userDestination;
         var element = document.getElementById("inputWrapper");
         element.parentNode.removeChild(element);
       }    
@@ -66,7 +71,6 @@ angular
     //gets form data
     $scope.submitForm = function(title, duration_hr, duration_min){
 
-        alert(title);
         document.getElementById("getInfo").style.display="none";
         document.getElementById("getInfoForm").reset();
     
