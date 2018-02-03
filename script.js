@@ -1,5 +1,8 @@
 //global variables
 var userDest = "";
+var gTitle = "";
+var gHr = 0;
+var gMin = 0;
 
 //angular code
 angular.module('mwl.calendar.docs', ['mwl.calendar', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);
@@ -70,6 +73,9 @@ angular
     }
     //gets form data
     $scope.submitForm = function(title, duration_hr, duration_min){
+        gTitle = title;
+        gHr = duration_hr;
+        gMin = duration_min;
 
         document.getElementById("getInfo").style.display="none";
         document.getElementById("getInfoForm").reset();
