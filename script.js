@@ -79,6 +79,11 @@ angular
 
         document.getElementById("getInfo").style.display="none";
         document.getElementById("getInfoForm").reset();
+        putEvent();
     
     };
   }]);
+
+function test() {
+  alert("test");
+}
