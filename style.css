@@ -1,3 +1,20 @@
 #calendar_wrapper{
 	display:none;
 }
+#addEvent_wrapper{
+	display:none;
+}
+
+#getInfo {
+	display: none;
+	position: absolute;
+	width: 300px;
+	height: 230px;
+	z-index: 15;
+	top: 50%;
+	left: 50%;
+	margin: -100px 0 0 -150px;
+	background: white;
+	border: 1px solid grey;
+	padding: 15px;
+}

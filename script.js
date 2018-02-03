@@ -52,11 +52,23 @@ angular
       } 
       else{
         document.getElementById("calendar_wrapper").style.display="inline";
+        document.getElementById("addEvent_wrapper").style.display="inline";
         $scope.topMsg = "Your Destination: " + userDestination;
         var element = document.getElementById("inputWrapper");
         element.parentNode.removeChild(element);
-      }
-
-      
+      }    
     }
+  }])
+  .controller('addEventCtrl', ['$scope', function($scope){
+    $scope.addEvent = function(){
+      document.getElementById("getInfo").style.display="inline";
+    }
+    //gets form data
+    $scope.submitForm = function(title, duration_hr, duration_min){
+
+        alert(title);
+        document.getElementById("getInfo").style.display="none";
+        document.getElementById("getInfoForm").reset();
+    
+    };
   }]);

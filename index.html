@@ -17,6 +17,7 @@
     <script src="helpers.js"></script>
   </head>
   <body>
+  	<!-- Buttons and header -->
     <div ng-controller="btnCtrl" class="text-center">
     	<h2> {{ topMsg }} </h2> 
     	<div id="inputWrapper">
@@ -25,6 +26,7 @@
     	</div>
     </div>
     
+    <!-- Calendar -->
     <div ng-controller="EditableDeletableEventsCtrl as vm" id="calendar_wrapper">
   		<ng-include src="'calendarControls.html'"></ng-include>
   		<!-- Calendar by Matt Lewis -->
@@ -34,8 +36,27 @@
 		    view-date="vm.viewDate"
 		    cell-is-open="vm.cellIsOpen"
 		    cell-auto-open-disabled="true">
-		  </mwl-calendar>
-		  <button type="button">Add Event</button>
+		  </mwl-calendar>		  
+	</div>
+
+	<!-- Add event -->
+	<div ng-controller="addEventCtrl" id="addEvent_wrapper">
+		<button type="button" ng-click="addEvent()">Add Event</button>
+		<!-- Gets information from user for new event-->
+		<div id="getInfo">
+			<form id="getInfoForm" ng-submit="submitForm(event_title, event_duration_hr, event_duration_min)">
+				<div class="form-group">
+					<label for="event_title">Event Name:</label>
+					<input type="text" required="true" id="event_title" ng-model="event_title" /><br><br>
+					<label for="event_duration_hr">Duration:</label><br>
+					<label for="event_duration_hr"> Hours</label>
+					<input type="number" id="event_duration_hr" ng-model="event_duration_hr" min="0" required="true" style="width:50px"/>
+					<label for="event_duration_min">Minutes</label>
+					<input type="number" id="event_duration_min" max="59" min="0" ng-model="event_duration_min" required="true" style="width:50px" /><br><br>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
 	</div>
 
   </body>
