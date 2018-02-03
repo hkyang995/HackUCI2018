@@ -27,7 +27,10 @@
     	<h2> {{ topMsg }} </h2> 
     	<div id="inputWrapper">
 	    	Destination <input type="text" id="destinationInput"><br> 
-	    	<button type="button" ng-click="showCal()" onclick="getLatLong(document.getElementById('destinationInput').value)">Submit</button>
+	    	<button type="button" ng-click="showCal()" onclick="
+	    	getLatLong(document.getElementById('destinationInput').value); 
+    		setTimeout(function(){initialize(lat, lng);},1);
+	    	">Submit</button>
     	</div>
     </div>
     

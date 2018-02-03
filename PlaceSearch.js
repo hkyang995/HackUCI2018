@@ -74,9 +74,6 @@ function initialize(destLat , destLng) {
 
 //get destination of Lat and Long
 function getLatLong(userDest){
-  //temportarily hard coded. replace w/ user input from form
-  alert("function executed." + userDest);
-
   var destination = userDest;
   axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
     params:{
