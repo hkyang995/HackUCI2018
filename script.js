@@ -3,6 +3,8 @@ var userDest = "";
 var gTitle = "";
 var gHr = 0;
 var gMin = 0;
+var eventObject = new Array();
+
 
 //angular code
 angular.module('mwl.calendar.docs', ['mwl.calendar', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);
@@ -43,6 +45,19 @@ angular
     vm.viewDate = moment().startOf('month').toDate();
     vm.cellIsOpen = true;
 
+    //adds sorted events to calendar
+    vm.addEvent = function() {
+      for(var i = 0; i < eventObject.length; i++){
+        vm.events.push({
+          title: eventObject[i].title,
+          startsAt: moment().startOf('day').toDate(),
+          endsAt: moment().endOf('day').toDate(),
+          color: calendarConfig.colorTypes.important,
+          draggable: true,
+          resizable: true
+        });
+      }      
+    };
   })
   .controller('btnCtrl', ['$scope', function($scope){
     $scope.topMsg = "Create Schedule";
@@ -79,11 +94,15 @@ angular
 
         document.getElementById("getInfo").style.display="none";
         document.getElementById("getInfoForm").reset();
-        putEvent();
-    
+        
+        var temp = {
+          title: gTitle,
+          hr: gHr,
+          min: gMin
+        };
+        eventObject.push(temp);        
     };
   }]);
 
-function test() {
-  alert("test");
-}
+  //add events to a global object
+  //then use a button inside of the calendar controller to shuffle them into the calendar
