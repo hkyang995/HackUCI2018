@@ -19,9 +19,14 @@
 	padding: 20px;
 }
 
+#rmvSingle{
+	display:none;
+}
 
 #map {
-	height: 100%;
+	padding: 25px;
+	height: 50%;
+	width: 50%;
 }
 /* Optional: Makes the sample page fill the window. */
 html, body {

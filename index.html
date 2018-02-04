@@ -26,7 +26,8 @@
     <div ng-controller="btnCtrl" class="text-center">
     	<h2> {{ topMsg }} </h2> 
     	<div id="inputWrapper">
-	    	Destination <input type="text" id="destinationInput"><br> 
+	    	Destination <input type="text" id="destinationInput"><br>
+	    	Starting Date <input id="startingDate" type="date"><br> 
 	    	<button type="button" ng-click="showCal()" onclick="
 	    	getLatLong(document.getElementById('destinationInput').value); 
     		setTimeout(function(){initialize(lat, lng);},5000);
@@ -46,12 +47,19 @@
 		    cell-auto-open-disabled="true">
 		  </mwl-calendar>
 		  <!-- Sort added events -->
-		  <button type="button" ng-click="vm.addEvent()">Sort Events</button>		  
+		  <button type="button" ng-click="vm.addEvent()" onclick="rmvEvents()">Sort Events</button>		  
 	</div>
 
 	<!-- Add event -->
 	<div ng-controller="addEventCtrl" id="addEvent_wrapper">
 		<button type="button" ng-click="addEvent()">Add Event</button>
+
+		<!-- Display added events -->
+		<div ng-repeat="temp_sched in schedules" id="t_sched">
+			<h3>{{ temp_sched.title }}</h3>
+			<p>{{ temp_sched.content }}</p>				
+		</div>
+		<button type="button" ng-click="removeLatest()" id="rmvSingle">Remove</button>
 		<!-- Gets information from user for new event-->
 		<div id="getInfo">
 			<form id="getInfoForm" ng-submit="submitForm(event_title, event_duration_hr, event_duration_min)">
@@ -75,8 +83,8 @@
 		</div>
 	</div>
 
-
 	<div id="map"></div>
+
 
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU&libraries=places&callback=initMap"></script>
 

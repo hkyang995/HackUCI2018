@@ -53,10 +53,11 @@ angular
           startsAt: moment().startOf('day').toDate(),
           endsAt: moment().endOf('day').toDate(),
           color: calendarConfig.colorTypes.important,
-          draggable: true,
+          draggable: false,
           resizable: true
         });
-      }      
+      } 
+      eventObject = [];     
     };
   })
   .controller('btnCtrl', ['$scope', function($scope){
@@ -83,6 +84,8 @@ angular
     }
   }])
   .controller('addEventCtrl', ['$scope', function($scope){
+    $scope.schedules = [];
+
     $scope.addEvent = function(){
       document.getElementById("getInfo").style.display="inline";
     }
@@ -100,9 +103,35 @@ angular
           hr: gHr,
           min: gMin
         };
-        eventObject.push(temp);        
+        //shows button when the first form is submitted
+
+        if($scope.schedules.length == 0){
+          document.getElementById("rmvSingle").style.display="inline";
+        }
+        eventObject.push(temp); 
+
+        $scope.schedules.push({title: gTitle, content: "Duration: " + gHr + "hrs " + gMin + "mins"});
     };
+    //removes all
+    $scope.removeE = function(){
+      var t = $scope.schedules.length;
+        for(var i = 0; i < t; i++){
+          $scope.schedules.pop();
+        }        
+    };
+    //removes one
+    $scope.removeLatest = function(){
+      $scope.schedules.pop();
+      //hides button if nothing is in the array
+      if($scope.schedules.length == 0){
+        document.getElementById("rmvSingle").style.display="none";
+      }
+    };
+
   }]);
 
-  //add events to a global object
-  //then use a button inside of the calendar controller to shuffle them into the calendar
+//removes events on display when theyre being sorted
+//calls removeE function inside of the addEventCtrl
+function rmvEvents(){
+  angular.element(document.getElementById('addEvent_wrapper')).scope().removeE();
+}
