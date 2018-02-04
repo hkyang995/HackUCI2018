@@ -1,11 +1,17 @@
 //calculation for miles shit
 function sortEvents(){
 	// // should be this: getTargetInfo(eventObject[0].title);
-	setTimeout(function(){point1Info(eventObject[0]);},3000);
+	point1Info(eventObject[0], eventObject[1]);
+	point1Info(eventObject[1], eventObject[2]);
+	//point1Info(eventObject[2], eventObject[3]);
 	point1 = addressFormat1; //the immediate created placeID is stored in vacationHome
-	setTimeout(function(){point2Info(eventObject[1]);},3000);
 	point2 = addressFormat2;
-	setTimeout(function(){twoPointInfo(point1, point2);}, 3000);
+	//getEvents();
+
+	
+	
+}
+
 	
 	//problem: inconsistent GET request
 
@@ -40,7 +46,7 @@ function sortEvents(){
 
 
 
-}
+
 
 function twoPointInfo(point1, point2){
 	fetch("https://proxy-sauce.glitch.me/https://maps.googleapis.com/maps/api/directions/json?\
@@ -50,6 +56,7 @@ function twoPointInfo(point1, point2){
     .then(response => response.json())
     .then(data => {
       console.log(data);
+      console.log(point1 + " " + point2);
       console.log(data.routes[0].legs[0].distance.text);
       console.log(data.routes[0].legs[0].duration.text);
 	});
