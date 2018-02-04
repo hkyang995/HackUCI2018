@@ -3,6 +3,8 @@ function sortEvents(){
 	// // should be this: getTargetInfo(eventObject[0].title);
 	point1Info(eventObject[0], eventObject[3]);
 	point1Info(eventObject[1], eventObject[2]);
+	point1Info(eventObject[2], eventObject[1]);
+	point1Info(eventObject[3], eventObject[0]);
 	//point1Info(eventObject[2], eventObject[3]);
 	point1 = addressFormat1; //the immediate created placeID is stored in vacationHome
 	point2 = addressFormat2;
