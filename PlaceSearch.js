@@ -124,7 +124,9 @@ function getTargetInfo(userDest){
   });
 }
 
+
 //get info of point1 (address)
+
 function point1Info(pt1Dest, pt2Dest){
   var destin1 = pt1Dest;
   var destin2 = pt2Dest;
@@ -137,9 +139,8 @@ function point1Info(pt1Dest, pt2Dest){
   .then(function(response){
     console.log(response);
     addressFormat1 = response.data.results[0].formatted_address;
-
     //nested point 2 info
-    point2Info(pt2Dest);
+    point2Info(addressFormat1, pt2Dest);
   })
   .catch(function(error){
     console.log(error);
@@ -147,7 +148,7 @@ function point1Info(pt1Dest, pt2Dest){
 }
 
 //get info of point2 (address)
-function point2Info(userDest){
+function point2Info(begDest, userDest){
   var destin2 = userDest;
   axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
     params:{
@@ -158,8 +159,9 @@ function point2Info(userDest){
   .then(function(response){
     console.log(response);
     addressFormat2 = response.data.results[0].formatted_address;
+
     //nested twopointinfo
-    twoPointInfo(addressFormat1, addressFormat2);
+    twoPointInfo(begDest, addressFormat2);
   })
   .catch(function(error){
     console.log(error);
