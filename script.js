@@ -19,23 +19,7 @@ angular
     
     var vm = this;    
 
-    vm.events = [
-      {
-        title: 'Deletable event',
-        color: calendarConfig.colorTypes.info,
-        startsAt: moment().startOf('month').toDate(),
-        actions: [{
-          label: '<i class=\'glyphicon glyphicon-remove\'></i>',
-          onClick: function(args) {
-            alert.show('Deleted', args.calendarEvent);
-          }
-        }]
-      }, {
-        title: 'Non editable and deletable event',
-        color: calendarConfig.colorTypes.important,
-        startsAt: moment().startOf('month').toDate()
-      }
-    ];
+    vm.events = [];
 
     vm.calendarView = 'week';
     vm.viewDate = moment().startOf('month').toDate();
@@ -96,11 +80,16 @@ angular
       if (userDestination == ""){
         alert("Please enter a destination.");
       } 
+      else if(document.getElementById('startingDate').value == ""){
+        alert("Please enter a date.");
+      }
       else{
         //get starting date from the form
         tripStart = document.getElementById('startingDate').value;
         wakeUpTime = document.getElementById('startTime').value;
         bedTime = document.getElementById('endTime').value;
+
+
 
         //calculate the amount of hours left in the day after sleep is taken into account
         timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
@@ -127,6 +116,10 @@ angular
 
     $scope.addEvent = function(){
       document.getElementById("getInfo").style.display="inline";
+    }
+    $scope.exitBox = function(){
+      document.getElementById("getInfo").style.display="none";
+      document.getElementById("getInfoForm").reset();
     }
     //gets form data
     $scope.submitForm = function(title, duration_hr, duration_min){

@@ -5,6 +5,14 @@
 	display:none;
 }
 
+#inputWrapper{
+	padding: 15px;
+}
+
+#btnWrapper{
+	text-align:center;
+}
+
 #getInfo {
 	display: none;
 	position: absolute;
@@ -24,9 +32,12 @@
 }
 
 #map {
+	display: block;
+	margin: 0 auto;
 	padding: 25px;
 	height: 50%;
 	width: 50%;
+	padding: 10px;
 }
 /* Optional: Makes the sample page fill the window. */
 html, body {
