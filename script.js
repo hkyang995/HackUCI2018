@@ -1,9 +1,14 @@
 //global variables
+var timeLeft = 1440;
 var userDest = "";
 var gTitle = "";
 var gHr = 0;
 var gMin = 0;
+var totalMin = 0;
 var eventObject = new Array();
+var tripStart = Date.now();
+var wakeUpTime;
+var bedTime;
 
 
 //angular code
@@ -12,19 +17,10 @@ angular
   .module('mwl.calendar.docs')
   .controller('EditableDeletableEventsCtrl', function(moment, alert, calendarConfig) {
     
-    var vm = this;
+    var vm = this;    
+
     vm.events = [
       {
-        title: 'Editable event',
-        color: calendarConfig.colorTypes.warning,
-        startsAt: moment().startOf('month').toDate(),
-        actions: [{
-          label: '<i class=\'glyphicon glyphicon-pencil\'></i>',
-          onClick: function(args) {
-            alert.show('Edited', args.calendarEvent);
-          }
-        }]
-      }, {
         title: 'Deletable event',
         color: calendarConfig.colorTypes.info,
         startsAt: moment().startOf('month').toDate(),
@@ -45,18 +41,45 @@ angular
     vm.viewDate = moment().startOf('month').toDate();
     vm.cellIsOpen = true;
 
-    //adds sorted events to calendar
+    //adds events to calendar
     vm.addEvent = function() {
+      //we need to sort them first!
+
+      var tomorrow = [];
+      //add 0th object to tomorrow as it is the place of temporary residence
+      tomorrow.push(eventObject[0]);
+  
       for(var i = 0; i < eventObject.length; i++){
-        vm.events.push({
-          title: eventObject[i].title,
-          startsAt: moment().startOf('day').toDate(),
-          endsAt: moment().endOf('day').toDate(),
-          color: calendarConfig.colorTypes.important,
-          draggable: false,
-          resizable: true
-        });
-      } 
+        //checks if event will fit into the current day
+        if(timeLeft >= eventObject[i].totMin){
+          timeLeft = (timeLeft - eventObject[i].totMin);
+          //inputs event into calendar
+          vm.events.push({
+            title: eventObject[i].title,
+            startsAt: tripStart,
+            color: calendarConfig.colorTypes.important,
+            draggable: false,
+            resizable: true
+          });
+        } 
+        else{ //if it doesnt fit in that day, it waits until "tomorrow"
+          if (i != 0){
+            tomorrow.push(eventObject[i]);
+          }          
+        }
+        
+      }
+
+      //we set eventObject equal to tomorrow and recurse the function to find a schedule for the next day if
+      //there are objects still needing to be put into the schedule
+      if(tomorrow.length > 1){
+        var newTripStart = moment(tripStart).add(1, 'd').toDate();
+        tripStart = newTripStart;
+        eventObject = tomorrow;
+        timeLeft = 1440;
+        vm.addEvent();
+      }
+
       eventObject = [];     
     };
   })
@@ -74,6 +97,12 @@ angular
         alert("Please enter a destination.");
       } 
       else{
+        //get starting date from the form
+        tripStart = document.getElementById('startingDate').value;
+        wakeUpTime = document.getElementById('startTime').value;
+        bedTime = document.getElementById('endTime').value;
+
+        //display calendar
         document.getElementById("calendar_wrapper").style.display="inline";
         document.getElementById("addEvent_wrapper").style.display="inline";
         $scope.topMsg = "Your Destination: " + userDestination;
@@ -94,6 +123,7 @@ angular
         gTitle = title;
         gHr = duration_hr;
         gMin = duration_min;
+        totalMin = (duration_hr * 60) + duration_min;
 
         document.getElementById("getInfo").style.display="none";
         document.getElementById("getInfoForm").reset();
@@ -101,13 +131,17 @@ angular
         var temp = {
           title: gTitle,
           hr: gHr,
-          min: gMin
+          min: gMin,
+          totMin: totalMin
         };
+
         //shows button when the first form is submitted
 
         if($scope.schedules.length == 0){
           document.getElementById("rmvSingle").style.display="inline";
         }
+
+        //put temp into the array
         eventObject.push(temp); 
 
         $scope.schedules.push({title: gTitle, content: "Duration: " + gHr + "hrs " + gMin + "mins"});
@@ -134,4 +168,5 @@ angular
 //calls removeE function inside of the addEventCtrl
 function rmvEvents(){
   angular.element(document.getElementById('addEvent_wrapper')).scope().removeE();
+  document.getElementById("rmvSingle").style.display="none";
 }
