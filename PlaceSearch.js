@@ -14,6 +14,7 @@ var destMap = "";
 var eventObject = ["2952 Maxson Road El Monte", "19505 Galeview Drive Rowland Heights", "diamond bar high school", "the shoppes"];
 var point1 = "";
 var point2 = "";
+var distanceAmt = "";
 
 
 function initMap() {
@@ -85,25 +86,6 @@ function searchMarkers(destMap, destLat , destLng){
   });
 }
 
-// // get Lat and Long of destination 
-// function getLatLong(userDest){
-//   var destination = userDest;
-//   axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
-//     params:{
-//       address: destination,
-//       key: 'AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU'
-//     }
-//   })
-//   .then(function(response){
-//     console.log(response);
-//     lat = response.data.results[0].geometry.location.lat;
-//     lng = response.data.results[0].geometry.location.lng;
-//   })
-//   .catch(function(error){
-//     console.log(error);
-//   });
-// }
-
 //get info of destination (Lat, Long, address)
 function getTargetInfo(userDest){
   var destination = userDest;
@@ -137,7 +119,7 @@ function point1Info(pt1Dest, pt2Dest){
     }
   })
   .then(function(response){
-    console.log(response);
+    // console.log(response);
     addressFormat1 = response.data.results[0].formatted_address;
     //nested point 2 info
     point2Info(addressFormat1, pt2Dest);
@@ -157,7 +139,7 @@ function point2Info(begDest, userDest){
     }
   })
   .then(function(response){
-    console.log(response);
+    // console.log(response);
     addressFormat2 = response.data.results[0].formatted_address;
 
     //nested twopointinfo
