@@ -102,6 +102,16 @@ angular
         wakeUpTime = document.getElementById('startTime').value;
         bedTime = document.getElementById('endTime').value;
 
+        //calculate the amount of hours left in the day after sleep is taken into account
+        timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
+        //calculating the time the user goes to bed
+        if( parseInt(bedTime.slice(0,2)) <= 13){
+          timeLeft = timeLeft + ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
+        }
+        else{
+          timeLeft = timeLeft - ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
+        }
+
         //display calendar
         document.getElementById("calendar_wrapper").style.display="inline";
         document.getElementById("addEvent_wrapper").style.display="inline";
