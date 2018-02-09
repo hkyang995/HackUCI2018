@@ -7,6 +7,9 @@
 //global variables for data storing, etc
 var lat = "";
 var lng = "";
+//event object that will hold the events
+var eventObject = "";
+var formattedAddr = [];
 
 function initMap() {
     // Create a map object and specify the DOM element for display.
@@ -89,4 +92,39 @@ function getLatLong(userDest){
   .catch(function(error){
     console.log(error);
   });
+}
+var counter = 0;
+//get info of the points
+function pointInfo(eventObj){
+
+  axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+    params: {
+      address: eventObj[counter], //fix this i, temporary
+      key: 'AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU'
+    }
+  })
+    .then(function(response){
+      formattedAddr[counter] = response.data.results[0].formatted_address;
+      counter = counter + 1;
+      //recurses function if we still need more addresses
+      if (eventObj.size > counter){
+        pointInfo(eventObj);
+      } else{
+        //call the next function in line
+        pointInfo(eventObj, formattedAddr);
+      }
+    })
+}
+
+function pointinfo(evObj, formAddr){
+  fetch("https://proxy-sauce.glitch.me/https://maps.googleapis.com/maps/api/directions/json?\
+    key=AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU&\
+    mode=driving&\
+    destination=" + formAddr[0] + "&origin=" + formAddr[1] + "\"")
+      .then(response => response.json())
+      .then(data =>) {
+        console.log(formAddr[0] + "To" + formAddr[1]);
+        console.log(data.routes[0].legs[0].distance.text);
+        
+      }
 }
