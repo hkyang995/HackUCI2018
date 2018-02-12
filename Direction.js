@@ -2,23 +2,13 @@ var distBtwn = [];
 
 //calculation for miles shit
 function sortEvents(){
-	// // should be this: getTargetInfo(eventObject[0].title);
-
 	// holds distance between locations
-
 	var tempObj = []; // temporary to hold "sorted" array
 	tempObj[0] = eventObject[0]; //0 is the root
 
-	for (var i = 0; i < eventObject.length; i ++){
-		var p = (i + 1);
-		pLoop(p, i);
-		// for (var p = (i + 1); p < eventObject.length; p++){
-			
-		// }
-		//find a way to compare the distances here, but we have to wait until distBtwn is populated
-	}
-	
-
+	//"loops" through the events and sorts them
+	var i = 0;
+	iLoop(i);
 	// //compare one object with all the rest
 	// //then move onto the next object and do the same thing
 	// for(var i = 0; i < eventObject.length; i++){
@@ -42,25 +32,44 @@ function sortEvents(){
 	// 		}
 	// 	}
 	// 	firstTime = true;
-	// }
-
-	
-	
-	//getEvents();	
+	// }	
 }
 
-var pLoop = function(p, i){
+//a fake "outer" loop that compares distances between destinations
+var iLoop = function(i){
+	var p = (i + 1);
+	pLoop(p, i, function(err, success){
+		if(err) throw err;
+
+
+		if(i < eventObject.length){
+			i = i + 1;
+			iLoop(i);
+		}
+
+	});
+
+	
+}
+
+//a fake "inner" loop that gets the distances between destinations
+var pLoop = function(p, i, cb){
 		point1Info(eventObject[i], eventObject[p], function(err, success){
 			if(err) throw err;
 			distBtwn[p] = distanceAmt;
-			console.log("Distanceamt: " + distBtwn[p]);
+			//console.log("Distanceamt: " + distBtwn[p]);
 				
 			if(p < eventObject.length){
 				p = p + 1;
 				pLoop(p, i);
 			}
+			if(cb){
+				cb(null, success);
+			}
+			
 				
 	});
+			
 }
 
 	// var myPromWrapper = function(i, p){
@@ -94,7 +103,9 @@ function twoPointInfo(point1, point2,cb){
 
       distanceAmt = data.routes[0].legs[0].distance.text;      
       distanceAmt = parseInt((distanceAmt.slice(" ")));
-      cb(null, distanceAmt);
+      if (cb){
+      	cb(null, distanceAmt);
+      }      
       //console.log(distanceAmt);
       return distanceAmt;
 	});
