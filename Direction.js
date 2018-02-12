@@ -1,57 +1,101 @@
+var distBtwn = [];
+
 //calculation for miles shit
 function sortEvents(){
 	// // should be this: getTargetInfo(eventObject[0].title);
-	// setTimeout(function(){point1Info(eventObject[0], eventObject[1]);},0);
-	// setTimeout(function(){console.log(distanceAmt);},3000);
-	// setTimeout(function(){point1Info(eventObject[0], eventObject[2]);},3001);
-	// setTimeout(function(){console.log(distanceAmt);},6000);
-	// setTimeout(function(){point1Info(eventObject[0], eventObject[3]);},6001);
-	// setTimeout(function(){console.log(distanceAmt);},9000);
 
-	var newArr = [];
-	var shortest = 1;
-	newArr[0] = eventObject[0];
+	// holds distance between locations
 
-	for(var i = 1; i < eventObject.length - 1; i++){
-		//get distance of 2 variables in relation to the previous one
-		
-		for(var y = i + 1; y < eventObject.length - 1; y++){
-			console.log("i-1 " + eventObject[i - 1]);
-			setTimeout(function(){point1Info(eventObject[i - 1], eventObject[y]);},3000);
-			var temp1 = distanceAmt;
-			setTimeout(function(){point1Info(eventObject[i - 1], eventObject[y + 1]);},4000);
-			var temp2 = distanceAmt;
+	var tempObj = []; // temporary to hold "sorted" array
+	tempObj[0] = eventObject[0]; //0 is the root
 
-			if(temp1 > temp2){
-				shortest = temp2;
-			}
-		}		
-
-		newArr.push(eventObject[shortest]);
+	for (var i = 0; i < eventObject.length; i ++){
+		var p = (i + 1);
+		pLoop(p, i);
+		// for (var p = (i + 1); p < eventObject.length; p++){
+			
+		// }
+		//find a way to compare the distances here, but we have to wait until distBtwn is populated
 	}
+	
 
-	for(var p = 0; i > newArr.length; p++){
-		console.log("Distance: " + p + newArr[p]);
-	}
+	// //compare one object with all the rest
+	// //then move onto the next object and do the same thing
+	// for(var i = 0; i < eventObject.length; i++){
+	// 	for(var p = (i + 1); p < 5; p++){
+	// 		//find the distance here
+	// 		distBtwn[p] = point1Info(eventObject[i], eventObject[p]);
+	// 	}
+	// 	//compare the distances here
+	// 	bool firstTime = true;
+	// 	for(var k = (i + 1); k < 5; k++){
+	// 		if(firstTime == true){
+	// 			firstTime = false;
+	// 			tempObj[i] = eventObject[k];
+	// 			eventObject[k].pop();
+	// 		}
+	// 		//else if is pseudocode for now
+	// 		else if(tempObj[i] < distBtwn[k]){
+	// 			var temp = tempObj[i];
+	// 			tempObj[i] = eventObject[k];
+	// 			eventObject[k] = temp;
+	// 		}
+	// 	}
+	// 	firstTime = true;
+	// }
+
+	
 	
 	//getEvents();	
 }
 
-function twoPointInfo(point1, point2){
+var pLoop = function(p, i){
+		point1Info(eventObject[i], eventObject[p], function(err, success){
+			if(err) throw err;
+			distBtwn[p] = distanceAmt;
+			console.log("Distanceamt: " + distBtwn[p]);
+				
+			if(p < eventObject.length){
+				p = p + 1;
+				pLoop(p, i);
+			}
+				
+	});
+}
+
+	// var myPromWrapper = function(i, p){
+	// 	return new Promise(function(resolve, reject){
+	// 		setTimeout(
+	// 			function(){
+	// 			resolve(point1Info(eventObject[i], eventObject[p]));					
+	// 		},1000);
+	// 	});
+	// }
+
+	
+	// var askProm = function(i, p) {
+	// 	myPromWrapper(i, p)
+	// 	.then(function(f){
+	// 		console.log(f);
+	// 	})
+	// 	.catch(function(e){
+	// 		console.log(e);
+	// 	});
+	// };
+
+
+function twoPointInfo(point1, point2,cb){
 	fetch("https://proxy-sauce.glitch.me/https://maps.googleapis.com/maps/api/directions/json?\
 		key=AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU&\
 		mode=driving&\
 		destination=" + point1 + "&origin=" + point2 + "\"")
     .then(response => response.json())
-    .then(data => {
-      // console.log(data);
-      console.log(point1 + " to " + point2);
-      //console.log(data.routes[0].legs[0].distance.text);
-      distanceAmt = data.routes[0].legs[0].distance.text;
-      console.log(distanceAmt);
-      //console.log(data.routes[0].legs[0].duration.text);
+    .then(data => { 
+
+      distanceAmt = data.routes[0].legs[0].distance.text;      
       distanceAmt = parseInt((distanceAmt.slice(" ")));
-      console.log(distanceAmt);
+      cb(null, distanceAmt);
+      //console.log(distanceAmt);
       return distanceAmt;
 	});
 }
