@@ -40,8 +40,8 @@ var iLoop = function(i){
 	var p = (i + 1);
 	pLoop(p, i, function(err, success){
 		if(err) throw err;
-
-
+		
+		//sort stuff here
 		if(i < eventObject.length){
 			i = i + 1;
 			iLoop(i);
