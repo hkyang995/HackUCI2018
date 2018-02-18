@@ -116,7 +116,9 @@ function pointInfo(eventObj){
     })
 }
 
-function pointinfo(evObj, formAddr){
+
+
+/*function pointinfo(evObj, formAddr){
   fetch("https://proxy-sauce.glitch.me/https://maps.googleapis.com/maps/api/directions/json?\
     key=AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU&\
     mode=driving&\
@@ -128,3 +130,4 @@ function pointinfo(evObj, formAddr){
         
       }
 }
+*/
