@@ -1,15 +1,19 @@
-
 //How to use:
 // -getLatLong(userDest);
-// -initialize(lat, lng);
+// -newMap(lat, lng);
+// -optional: searchMarkers(lat, lng);
 
 
 //global variables for data storing, etc
 var lat = "";
 var lng = "";
-//event object that will hold the events
-var eventObject = "";
-var formattedAddr = [];
+var addressFormat1 = "";
+var addressFormat2 = "";
+var destMap = "";
+var eventObject = ["2952 Maxson Road El Monte", "diamond bar high school", "Northwood High school", "19505 Galeview Drive Rowland Heights", "Los Angeles", "San Francisco", "California State University Fullerton", "the shoppes"];
+var point1 = "";
+var point2 = "";
+var distanceAmt = "";
 
 function initMap() {
     // Create a map object and specify the DOM element for display.
@@ -19,35 +23,41 @@ function initMap() {
       });
 
     infoWindow = new google.maps.InfoWindow;
-    // Try HTML5 geolocation.
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
 
-        infoWindow.setPosition(pos);
-        infoWindow.setContent('Location found.');
-        infoWindow.open(map);
-        map.setCenter(pos);
-      }, function() {
-          handleLocationError(true, infoWindow, map.getCenter());
-      });
-    } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, infoWindow, map.getCenter());
-    }
+    // // HTML5 geolocation.
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(function(position) {
+    //     var pos = {
+    //         lat: position.coords.latitude,
+    //         lng: position.coords.longitude
+    //     };
+
+    //     infoWindow.setPosition(pos);
+    //     infoWindow.setContent('Location found.');
+    //     infoWindow.open(map);
+    //     map.setCenter(pos);
+    //   }, function() {
+    //       handleLocationError(true, infoWindow, map.getCenter());
+    //   });
+    // } else {
+    //     // Browser doesn't support Geolocation
+    //     handleLocationError(false, infoWindow, map.getCenter());
+    // }
 }
 
-//takes user to destination + searches for nearby restaurants
-function initialize(destLat , destLng) {
-  var map = new google.maps.Map(document.getElementById('map'), {
+//takes user to destination 
+function newMap(destLat , destLng) {
+    destMap = new google.maps.Map(document.getElementById('map'), {
     center: {lat: destLat, lng: destLng},
     zoom: 15,
     scrollwheel: false
   });
 
+  //optional: searchMarkers();
+}
+
+//searches for nearby restaurants
+function searchMarkers(destMap, destLat , destLng){
   // Specify location, radius and place types for your Places API search.
   var request = {
     location: {lat: destLat, lng: destLng},
@@ -57,7 +67,7 @@ function initialize(destLat , destLng) {
 
   // Create the PlaceService and send the request.
   // Handle the callback with an anonymous function.
-  var service = new google.maps.places.PlacesService(map);
+  var service = new google.maps.places.PlacesService(destMap);
   service.nearbySearch(request, function(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
@@ -66,7 +76,7 @@ function initialize(destLat , destLng) {
         // the map as a marker, and register an event to handle a
         // click on the marker.
         var marker = new google.maps.Marker({
-          map: map,
+          map: destMap,
           position: place.geometry.location
         });
       }
@@ -74,9 +84,8 @@ function initialize(destLat , destLng) {
   });
 }
 
-
-//get destination of Lat and Long
-function getLatLong(userDest){
+//get info of destination (Lat, Long, address)
+function getTargetInfo(userDest){
   var destination = userDest;
   axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
     params:{
@@ -88,46 +97,53 @@ function getLatLong(userDest){
     console.log(response);
     lat = response.data.results[0].geometry.location.lat;
     lng = response.data.results[0].geometry.location.lng;
+    addressFormat = response.data.results[0].formatted_address;
   })
   .catch(function(error){
     console.log(error);
   });
 }
-var counter = 0;
-//get info of the points
-function pointInfo(eventObj){
 
-  axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-    params: {
-      address: eventObj[counter], //fix this i, temporary
+
+//get info of point1 (address)
+
+function point1Info(pt1Dest, pt2Dest,cb){
+  var destin1 = pt1Dest;
+  var destin2 = pt2Dest;
+  axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+    params:{
+      address: destin1,
       key: 'AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU'
     }
   })
-    .then(function(response){
-      formattedAddr[counter] = response.data.results[0].formatted_address;
-      counter = counter + 1;
-      //recurses function if we still need more addresses
-      if (eventObj.size > counter){
-        pointInfo(eventObj);
-      } else{
-        //call the next function in line
-        pointInfo(eventObj, formattedAddr);
-      }
-    })
+  .then(function(response){
+    // console.log(response);
+    addressFormat1 = response.data.results[0].formatted_address;
+    //nested point 2 info
+    point2Info(addressFormat1, pt2Dest,cb);
+  })
+  .catch(function(error){
+    console.log(error);
+  });
 }
 
+//get info of point2 (address)
+function point2Info(begDest, userDest,cb){
+  var destin2 = userDest;
+  axios.get('https://maps.googleapis.com/maps/api/geocode/json',{
+    params:{
+      address: destin2,
+      key: 'AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU'
+    }
+  })
+  .then(function(response){
+    // console.log(response);
+    addressFormat2 = response.data.results[0].formatted_address;
 
-
-/*function pointinfo(evObj, formAddr){
-  fetch("https://proxy-sauce.glitch.me/https://maps.googleapis.com/maps/api/directions/json?\
-    key=AIzaSyACC7GudsQruzi7LLyFrLRq78HnjJvJBlU&\
-    mode=driving&\
-    destination=" + formAddr[0] + "&origin=" + formAddr[1] + "\"")
-      .then(response => response.json())
-      .then(data =>) {
-        console.log(formAddr[0] + "To" + formAddr[1]);
-        console.log(data.routes[0].legs[0].distance.text);
-        
-      }
+    //nested twopointinfo
+    twoPointInfo(begDest, addressFormat2,cb);
+  })
+  .catch(function(error){
+    console.log(error);
+  });
 }
-*/
