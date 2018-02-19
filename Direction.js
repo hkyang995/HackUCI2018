@@ -1,14 +1,22 @@
 var distBtwn = [];
-
+var tempObj = []; // temporary to hold "sorted" array
+var savedObj = [];
 //calculation for miles shit
-function sortEvents(){
+var isSorted = false;
+function sortEvents(cb){
 	// holds distance between locations
-	var tempObj = []; // temporary to hold "sorted" array
-	tempObj[0] = eventObject[0]; //0 is the root
+	
+	var t = eventObject[0]; //0 is the root
 
 	//"loops" through the events and sorts them
 	var i = 0;
-	iLoop(i);
+	
+	iLoop(i, function(err, success){
+		console.log("test");
+		if(err) throw err;
+		printStuff();
+	});
+
 	// //compare one object with all the rest
 	// //then move onto the next object and do the same thing
 	// for(var i = 0; i < eventObject.length; i++){
@@ -36,61 +44,75 @@ function sortEvents(){
 }
 
 //a fake "outer" loop that compares distances between destinations
-var iLoop = function(i){
+var iLoop = function(i, cb){
 	var p = (i + 1);
 	pLoop(p, i, function(err, success){
 		if(err) throw err;
+		// //sort stuff here
 		
-		//sort stuff here
+		// savedObj[i] = eventObject.shift();
+		// console.log("Saved:" + savedObj[i]);
+		var tlen = eventObject.length;
+		tempObj = eventObject;
+		for(var k = (i + 1); k < tlen; k++){
+			console.log("Comparing " + tempObj[i + 1] + "(" + distBtwn[i] + ") with " + tempObj[k] + "(" + distBtwn[k - 1] + ")");			
+			if(distBtwn[i] > distBtwn[k - 1]){
+				console.log("SWITCHING " + tempObj[i + 1] + "(" + distBtwn[i] + ") with " + tempObj[k] + "(" + distBtwn[k - 1] + ")");
+				//switch names
+				var temp = tempObj[i + 1];
+				tempObj[i + 1] = tempObj[k];
+				tempObj[k] = temp;
+				//switch distance
+				var temp2 = distBtwn[i];
+				distBtwn[i] = distBtwn[k - 1];
+				distBtwn[k - 1] = temp2;
+
+
+			}			
+		}
+
 		if(i < eventObject.length){
+			
+			distBtwn = [];
 			i = i + 1;
-			iLoop(i);
+			iLoop(i, cb);
+		}
+		if(i == eventObject.length - 1){
+			eventObject = tempObj;
+			if(cb){
+				cb(null, success);
+			}
 		}
 
 	});
+}
 
-	
+var printStuff = function(){
+	for(var t=0; t < eventObject.length; t++){
+		console.log(eventObject[t]);
+	}
 }
 
 //a fake "inner" loop that gets the distances between destinations
 var pLoop = function(p, i, cb){
 		point1Info(eventObject[i], eventObject[p], function(err, success){
 			if(err) throw err;
-			distBtwn[p] = distanceAmt;
+			distBtwn[p - 1] = distanceAmt;
+			console.log("Location: " + eventObject[p] + ":" + distBtwn[p-1]);
 			//console.log("Distanceamt: " + distBtwn[p]);
 				
+			
 			if(p < eventObject.length){
 				p = p + 1;
-				pLoop(p, i);
+				pLoop(p, i, cb);
 			}
-			if(cb){
-				cb(null, success);
-			}
-			
-				
+			if(p == eventObject.length){
+				cb(null, success);								
+			}					
 	});
 			
 }
 
-	// var myPromWrapper = function(i, p){
-	// 	return new Promise(function(resolve, reject){
-	// 		setTimeout(
-	// 			function(){
-	// 			resolve(point1Info(eventObject[i], eventObject[p]));					
-	// 		},1000);
-	// 	});
-	// }
-
-	
-	// var askProm = function(i, p) {
-	// 	myPromWrapper(i, p)
-	// 	.then(function(f){
-	// 		console.log(f);
-	// 	})
-	// 	.catch(function(e){
-	// 		console.log(e);
-	// 	});
-	// };
 
 
 function twoPointInfo(point1, point2,cb){
