@@ -32,8 +32,8 @@
 	    	What time do you normally wake up? <input id="startTime" type="time" required="true" value="07:30"><br>
 	    	and Sleep? <input id="endTime" type="time" required="true" value="22:30"><br>
 	    	<button type="button" ng-click="showCal()" onclick="
-	    	getLatLong(document.getElementById('destinationInput').value); 
-    		setTimeout(function(){initialize(lat, lng);},5000);
+	    	getTargetInfo(document.getElementById('destinationInput').value); 
+    		setTimeout(function(){newMap(lat, lng);},5000);
 	    	">Submit</button>
     	</div>
     </div>
@@ -56,6 +56,7 @@
 	<!-- Add event -->
 	<div ng-controller="addEventCtrl" id="addEvent_wrapper">
 		<button type="button" ng-click="addEvent()">Add Event</button>
+		(Please add your hotel/residence as your first event.)
 
 		<!-- Display added events -->
 		<div ng-repeat="temp_sched in schedules" id="t_sched">

@@ -1,7 +1,6 @@
 var distBtwn = [];
 var tempObj = []; // temporary to hold "sorted" array
-var savedObj = [];
-//calculation for miles shit
+
 var isSorted = false;
 function sortEvents(cb){
 	// holds distance between locations
@@ -16,31 +15,6 @@ function sortEvents(cb){
 		if(err) throw err;
 		printStuff();
 	});
-
-	// //compare one object with all the rest
-	// //then move onto the next object and do the same thing
-	// for(var i = 0; i < eventObject.length; i++){
-	// 	for(var p = (i + 1); p < 5; p++){
-	// 		//find the distance here
-	// 		distBtwn[p] = point1Info(eventObject[i], eventObject[p]);
-	// 	}
-	// 	//compare the distances here
-	// 	bool firstTime = true;
-	// 	for(var k = (i + 1); k < 5; k++){
-	// 		if(firstTime == true){
-	// 			firstTime = false;
-	// 			tempObj[i] = eventObject[k];
-	// 			eventObject[k].pop();
-	// 		}
-	// 		//else if is pseudocode for now
-	// 		else if(tempObj[i] < distBtwn[k]){
-	// 			var temp = tempObj[i];
-	// 			tempObj[i] = eventObject[k];
-	// 			eventObject[k] = temp;
-	// 		}
-	// 	}
-	// 	firstTime = true;
-	// }	
 }
 
 //a fake "outer" loop that compares distances between destinations
@@ -50,8 +24,6 @@ var iLoop = function(i, cb){
 		if(err) throw err;
 		// //sort stuff here
 		
-		// savedObj[i] = eventObject.shift();
-		// console.log("Saved:" + savedObj[i]);
 		var tlen = eventObject.length;
 		tempObj = eventObject;
 		for(var k = (i + 1); k < tlen; k++){
