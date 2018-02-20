@@ -5,7 +5,7 @@ var gTitle = "";
 var gHr = 0;
 var gMin = 0;
 var totalMin = 0;
-var eventObject = new Array();
+//var eventObject = [];
 var tripStart = Date.now();
 var wakeUpTime;
 var bedTime;
@@ -28,7 +28,11 @@ angular
     //adds events to calendar
     vm.addEvent = function() {
       //we need to sort them first!
+      for(var i = 0; i < eventObject.length; i++){
+        console.log(eventObject[i].title + " index: " + i);
+      }
 
+      sortEvents(function(err, success){
       var tomorrow = [];
       //add 0th object to tomorrow as it is the place of temporary residence
       tomorrow.push(eventObject[0]);
@@ -64,7 +68,13 @@ angular
         vm.addEvent();
       }
 
-      eventObject = [];     
+      eventObject = [];  
+
+
+
+      });
+
+        
     };
   })
   .controller('btnCtrl', ['$scope', function($scope){

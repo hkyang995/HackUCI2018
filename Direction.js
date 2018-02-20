@@ -3,15 +3,9 @@ var tempObj = []; // temporary to hold "sorted" array
 
 var isSorted = false;
 function sortEvents(cb){
-	// holds distance between locations
-	
-	var t = eventObject[0]; //0 is the root
-
 	//"loops" through the events and sorts them
-	var i = 0;
-	
+	var i = 0;	
 	iLoop(i, function(err, success){
-		console.log("test");
 		if(err) throw err;
 		printStuff();
 	});
@@ -27,10 +21,10 @@ var iLoop = function(i, cb){
 		var tlen = eventObject.length;
 		tempObj = eventObject;
 		for(var k = (i + 1); k < tlen; k++){
-			console.log("Comparing " + tempObj[i + 1] + "(" + distBtwn[i] + ") with " + tempObj[k] + "(" + distBtwn[k - 1] + ")");			
+			console.log("Comparing " + tempObj[i + 1].title + "(" + distBtwn[i] + ") with " + tempObj[k].title + "(" + distBtwn[k - 1] + ")");			
 			if(distBtwn[i] > distBtwn[k - 1]){
-				console.log("SWITCHING " + tempObj[i + 1] + "(" + distBtwn[i] + ") with " + tempObj[k] + "(" + distBtwn[k - 1] + ")");
-				//switch names
+				console.log("SWITCHING " + tempObj[i + 1].title + "(" + distBtwn[i] + ") with " + tempObj[k].title + "(" + distBtwn[k - 1] + ")");
+				//switch objects
 				var temp = tempObj[i + 1];
 				tempObj[i + 1] = tempObj[k];
 				tempObj[k] = temp;
@@ -38,8 +32,6 @@ var iLoop = function(i, cb){
 				var temp2 = distBtwn[i];
 				distBtwn[i] = distBtwn[k - 1];
 				distBtwn[k - 1] = temp2;
-
-
 			}			
 		}
 
@@ -61,27 +53,27 @@ var iLoop = function(i, cb){
 
 var printStuff = function(){
 	for(var t=0; t < eventObject.length; t++){
-		console.log(eventObject[t]);
+		console.log(eventObject[t].title);
 	}
 }
 
 //a fake "inner" loop that gets the distances between destinations
 var pLoop = function(p, i, cb){
-		point1Info(eventObject[i], eventObject[p], function(err, success){
+	if(eventObject[p]){
+		point1Info(eventObject[i].title, eventObject[p].title, function(err, success){
 			if(err) throw err;
 			distBtwn[p - 1] = distanceAmt;
-			console.log("Location: " + eventObject[p] + ":" + distBtwn[p-1]);
-			//console.log("Distanceamt: " + distBtwn[p]);
-				
+			console.log("Location: " + eventObject[p].title + ":" + distBtwn[p-1]);	
 			
-			if(p < eventObject.length){
+			if(p < eventObject.length - 1){
 				p = p + 1;
 				pLoop(p, i, cb);
 			}
-			if(p == eventObject.length){
+			else{
 				cb(null, success);								
 			}					
-	});
+		});
+	}
 			
 }
 
