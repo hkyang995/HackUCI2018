@@ -15,58 +15,63 @@ var bedTime;
 angular.module('mwl.calendar.docs', ['mwl.calendar', 'ngAnimate', 'ui.bootstrap', 'colorpicker.module']);
 angular
   .module('mwl.calendar.docs')
-  .controller('EditableDeletableEventsCtrl', function(moment, alert, calendarConfig) {
+  .controller('EditableDeletableEventsCtrl', function(moment, alert, calendarConfig, $scope) {
     
     var vm = this;    
 
     vm.events = [];
 
     vm.calendarView = 'week';
-    vm.viewDate = moment().startOf('month').toDate();
+    vm.viewDate = moment().startOf('week').toDate();
     vm.cellIsOpen = true;
 
     //adds events to calendar
     vm.addEvent = function() {
-      //we need to sort them first!
-      for(var i = 0; i < eventObject.length; i++){
-        console.log(eventObject[i].title + " index: " + i);
-      }
-
+      //sorts the functions first
       sortEvents(function(err, success){
-      var tomorrow = [];
-      //add 0th object to tomorrow as it is the place of temporary residence
-      tomorrow.push(eventObject[0]);
+        //var tomorrow = [];
+        //add 0th object to tomorrow as it is the place of temporary residence
+        //tomorrow.push(eventObject[0]);
   
-      for(var i = 0; i < eventObject.length; i++){
-        //checks if event will fit into the current day
-        if(timeLeft >= eventObject[i].totMin){
-          timeLeft = (timeLeft - eventObject[i].totMin);
-          //inputs event into calendar
+        for(var i = 0; i < eventObject.length; i++){
           vm.events.push({
-            title: eventObject[i].title,
-            startsAt: tripStart,
-            color: calendarConfig.colorTypes.important,
-            draggable: false,
-            resizable: true
-          });
-        } 
-        else{ //if it doesnt fit in that day, it waits until "tomorrow"
-          if (i != 0){
-            tomorrow.push(eventObject[i]);
-          }          
-        }
+              title: eventObject[i].title,
+              startsAt: tripStart,
+              color: calendarConfig.colorTypes.important,
+              draggable: false,
+              resizable: true
+            });
+          $scope.$apply();
+
+          //checks if event will fit into the current day
+         // if(timeLeft >= eventObject[i].totMin){
+          //  timeLeft = (timeLeft - eventObject[i].totMin);
+            //inputs event into calendar
+            // vm.events.push({
+            //   title: eventObject[i].title,
+            //   startsAt: tripStart,
+            //   color: calendarConfig.colorTypes.important,
+            //   draggable: false,
+            //   resizable: true
+            // });
+         // } 
+          //else{ //if it doesnt fit in that day, it waits until "tomorrow"
+           // if (i != 0){
+            //tomorrow.push(eventObject[i]);
+            //}          
+          //}
         
       }
 
       //we set eventObject equal to tomorrow and recurse the function to find a schedule for the next day if
       //there are objects still needing to be put into the schedule
-      if(tomorrow.length > 1){
-        var newTripStart = moment(tripStart).add(1, 'd').toDate();
-        tripStart = newTripStart;
-        eventObject = tomorrow;
-        timeLeft = 1440;
-        vm.addEvent();
-      }
+      // if(tomorrow.length > 1){
+      //   var newTripStart = moment(tripStart).add(1, 'd').toDate();
+      //   tripStart = newTripStart;
+      //   eventObject = tomorrow;
+      //   timeLeft = 1440;
+      //   vm.addEvent();
+      // }
 
       eventObject = [];  
 

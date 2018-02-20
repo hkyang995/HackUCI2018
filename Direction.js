@@ -8,6 +8,7 @@ function sortEvents(cb){
 	iLoop(i, function(err, success){
 		if(err) throw err;
 		printStuff();
+		cb(err, success);
 	});
 }
 
@@ -16,8 +17,7 @@ var iLoop = function(i, cb){
 	var p = (i + 1);
 	pLoop(p, i, function(err, success){
 		if(err) throw err;
-		// //sort stuff here
-		
+		// //sort stuff here		
 		var tlen = eventObject.length;
 		tempObj = eventObject;
 		for(var k = (i + 1); k < tlen; k++){
