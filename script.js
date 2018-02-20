@@ -29,57 +29,46 @@ angular
     vm.addEvent = function() {
       //sorts the functions first
       sortEvents(function(err, success){
-        //var tomorrow = [];
+        var tomorrow = [];
         //add 0th object to tomorrow as it is the place of temporary residence
-        //tomorrow.push(eventObject[0]);
-  
+        tomorrow.push(eventObject[0]);
+          
         for(var i = 0; i < eventObject.length; i++){
-          vm.events.push({
-              title: eventObject[i].title,
-              startsAt: tripStart,
-              color: calendarConfig.colorTypes.important,
-              draggable: false,
-              resizable: true
-            });
-          $scope.$apply();
+            //checks if event will fit into the current day
+            console.log("Totmin: " + eventObject[i].totMin + " TimeLeft:" + timeLeft);
+           if(timeLeft >= eventObject[i].totMin){
+            console.log("Test>");
+             timeLeft = (timeLeft - eventObject[i].totMin);
+             // inputs event into calendar
+              vm.events.push({
+                title: eventObject[i].title,
+                startsAt: tripStart,
+                color: calendarConfig.colorTypes.important,
+                draggable: false,
+                resizable: true
+              });
+              $scope.$apply();
+            } 
+            else{ //if it doesnt fit in that day, it waits until "tomorrow"
+             if (i != 0){
+              tomorrow.push(eventObject[i]);
+              }          
+            } 
+          }       
 
-          //checks if event will fit into the current day
-         // if(timeLeft >= eventObject[i].totMin){
-          //  timeLeft = (timeLeft - eventObject[i].totMin);
-            //inputs event into calendar
-            // vm.events.push({
-            //   title: eventObject[i].title,
-            //   startsAt: tripStart,
-            //   color: calendarConfig.colorTypes.important,
-            //   draggable: false,
-            //   resizable: true
-            // });
-         // } 
-          //else{ //if it doesnt fit in that day, it waits until "tomorrow"
-           // if (i != 0){
-            //tomorrow.push(eventObject[i]);
-            //}          
-          //}
-        
+      // we set eventObject equal to tomorrow and recurse the function to find a schedule for the next day if
+      // there are objects still needing to be put into the schedule
+      if(tomorrow.length > 1){
+        eventObject = []; 
+        var newTripStart = moment(tripStart).add(1, 'd').toDate();
+        tripStart = newTripStart;
+        eventObject = tomorrow;
+        timeLeft = 1440;
+        vm.addEvent();
+      } else{
+        eventObject = [];
       }
-
-      //we set eventObject equal to tomorrow and recurse the function to find a schedule for the next day if
-      //there are objects still needing to be put into the schedule
-      // if(tomorrow.length > 1){
-      //   var newTripStart = moment(tripStart).add(1, 'd').toDate();
-      //   tripStart = newTripStart;
-      //   eventObject = tomorrow;
-      //   timeLeft = 1440;
-      //   vm.addEvent();
-      // }
-
-      eventObject = [];  
-
-
-
-      });
-
-        
+      });        
     };
   })
   .controller('btnCtrl', ['$scope', function($scope){
@@ -106,15 +95,16 @@ angular
 
 
 
-        //calculate the amount of hours left in the day after sleep is taken into account
-        timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
-        //calculating the time the user goes to bed
-        if( parseInt(bedTime.slice(0,2)) <= 13){
-          timeLeft = timeLeft + ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
-        }
-        else{
-          timeLeft = timeLeft - ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
-        }
+        // //calculate the amount of hours left in the day after sleep is taken into account
+        // timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
+        // //calculating the time the user goes to bed
+        // if( parseInt(bedTime.slice(0,2)) <= 13){
+        //   timeLeft = timeLeft + ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
+        // }
+        // else{
+        //   timeLeft = timeLeft - ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
+        // }
+         console.log(timeLeft);
 
         //display calendar
         document.getElementById("calendar_wrapper").style.display="inline";
