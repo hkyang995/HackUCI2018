@@ -37,7 +37,6 @@ angular
             //checks if event will fit into the current day
             console.log("Totmin: " + eventObject[i].totMin + " TimeLeft:" + timeLeft);
            if(timeLeft >= eventObject[i].totMin){
-            console.log("Test>");
              timeLeft = (timeLeft - eventObject[i].totMin);
              // inputs event into calendar
               vm.events.push({
@@ -96,15 +95,10 @@ angular
 
 
         // //calculate the amount of hours left in the day after sleep is taken into account
-        // timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
+         timeLeft = timeLeft - ((parseInt(wakeUpTime.slice(0,2)) * 60) + parseInt(wakeUpTime.slice(3)));
         // //calculating the time the user goes to bed
-        // if( parseInt(bedTime.slice(0,2)) <= 13){
-        //   timeLeft = timeLeft + ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
-        // }
-        // else{
-        //   timeLeft = timeLeft - ((parseInt(bedTime.slice(0,2))*60) + parseInt(bedTime.slice(3)));
-        // }
-         console.log(timeLeft);
+        timeLeft = timeLeft - (((24 - parseInt(bedTime.slice(0,2)))*60)) + parseInt(bedTime.slice(3));
+        console.log("time left:" + timeLeft);
 
         //display calendar
         document.getElementById("calendar_wrapper").style.display="inline";
